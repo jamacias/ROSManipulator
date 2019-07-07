@@ -1,2 +1,0 @@
-manipulator_description
--DCATKIN_DEVEL_PREFIX=/mnt/d/ROS/ROSManipulator/simulation_ws/devel -DCMAKE_INSTALL_PREFIX=/mnt/d/ROS/ROSManipulator/simulation_ws/install -G Unix Makefiles
