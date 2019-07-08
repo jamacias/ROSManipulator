@@ -1,63 +1,59 @@
 <?xml version="1.0" ?>
 
 <robot name="manipulator" xmlns:xacro="http://www.ros.org/wiki/xacro">
-    <link name="base_link">
-        <visual>
-            <origin rpy="0 0 0" xyz="0 0 0.1"/>
-            <geometry>
-                <box size="1 1 0.2"/>
-            </geometry>
-        </visual>
-    </link>
+    <xacro:include filename="$(find manipulator_description)/urdf/links_joints.xacro" />
+    <xacro:include filename="$(find manipulator_description)/urdf/robot_parameters.xacro" />
 
-    <joint name="base_link__link_1" type="revolute">
-        <axis xyz="0 0 1" />
-        <limit effort="1000.0" lower="-3.14" upper="3.14" velocity="0.5" />
-        <origin rpy="0 0 0" xyz="0 0 0.2"/>
-        <parent link="base_link"/>
-        <child link="link1"/>
-    </joint>
+    <box_link
+      name="base_link"
+      origin_rpy="0 0 0"
+      origin_xyz="0 0 ${base_height/2}"
+      size="1 1 ${base_height}"
+    />
 
-    <link name="link1">
-        <visual>
-            <origin rpy="0 0 0" xyz="0 0 0.1"/>
-            <geometry>
-                <cylinder radius="0.35" length="0.2"/>
-            </geometry>
-        </visual>
-    </link>
+    <revolute_joint
+      name="q1" type="revolute"
+      axis_xyz="0 0 1"
+      origin_rpy="0 0 0" origin_xyz="0 0 ${base_height}"
+      parent="base_link"
+      child="link1"
+      limit_e="1000.0" limit_l="-3.14" limit_u="3.14" limit_v="0.5"
+    />
 
-    <joint name="link_1__link_2" type="revolute">
-        <axis xyz="0 1 0" />
-        <limit effort="1000.0" lower="-3.14" upper="3.14" velocity="0.5" />
-        <origin rpy="0 0 0" xyz="0 0 0.2"/>
-        <parent link="link1"/>
-        <child link="link2"/>
-    </joint>
+    <cylinder_link
+      name="link1"
+      origin_rpy="0 0 0" origin_xyz="0 0 ${L1/2}"
+      radius="0.35" length="${L1}"
+    />
 
-    <link name="link2">
-        <visual>
-            <origin rpy="0 0 0" xyz="0 0 0.5"/>
-            <geometry>
-                <cylinder radius="0.15" length="1"/>
-            </geometry>
-        </visual>
-    </link>
+    <revolute_joint
+      name="q2" type="revolute"
+      axis_xyz="0 1 0"
+      origin_rpy="0 0 0" origin_xyz="0 0 ${L1}"
+      parent="link1"
+      child="link2"
+      limit_e="1000.0" limit_l="-3.14" limit_u="3.14" limit_v="0.5"
+    />
 
-    <joint name="link_2__link_3" type="revolute">
-        <axis xyz="0 1 0" />
-        <limit effort="1000.0" lower="-3.14" upper="3.14" velocity="0.5" />
-        <origin rpy="0 0 0" xyz="0 0 1"/>
-        <parent link="link2"/>
-        <child link="link3"/>
-    </joint>
+    <cylinder_link
+      name="link2"
+      origin_rpy="0 0 0" origin_xyz="0 0 ${L2/2}"
+      radius="0.15" length="${L2}"
+    />
 
-    <link name="link3">
-        <visual>
-            <origin rpy="0 0 0" xyz="0 0 0.5"/>
-            <geometry>
-                <cylinder radius="0.15" length="1"/>
-            </geometry>
-        </visual>
-    </link>
+    <revolute_joint
+      name="q3" type="revolute"
+      axis_xyz="0 1 0"
+      origin_rpy="0 0 0" origin_xyz="0 0 ${L2}"
+      parent="link2"
+      child="link3"
+      limit_e="1000.0" limit_l="-3.14" limit_u="3.14" limit_v="0.5"
+    />
+
+    <cylinder_link
+      name="link3"
+      origin_rpy="0 0 0" origin_xyz="0 0 ${L3/2}"
+      radius="0.15" length="${L3}"
+    />
+
 </robot>
