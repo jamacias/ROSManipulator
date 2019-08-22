@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<launch>
+  <!--  ******************** Gazebo ********************  -->
+  <include file="$(find gazebo_ros)/launch/empty_world.launch">
+    <arg name="use_sim_time" value="true"/>
+    <arg name="debug" value="false"/>
+    <arg name="paused" value="true"/>
+  </include>
+
+  <group ns="/manipulator">
+    <!-- Translate model from xacro to URDF -->
+    <param name="robot_description" command="$(find xacro)/xacro '$(find manipulator_description)/urdf/manipulator.xacro'" />
+
+    <arg name="x" default="0"/>
+    <arg name="y" default="0"/>
+    <arg name="z" default="0"/>
+
+    <!-- Spawn the URDF robot into Gazebo. Notice the argument of -param robot_description -->
+    <node name="spawn_urdf" pkg="gazebo_ros" type="spawn_model"
+          args="-param robot_description -urdf -x $(arg x) -y $(arg y) -z $(arg z) -model manipulator" />
+
+    <!-- Load controllers -->
+    <rosparam command="load" file="$(find manipulator_description)/config/joints.yaml" />
+
+    <node name = "controller_spawner" pkg="controller_manager" type="spawner"
+          ns="/manipulator" respawn="false" output="screen"
+          args="--namespace=/manipulator
+          joint_state_controller
+          joint1_position_controller
+          joint2_position_controller
+          joint3_position_controller
+          --timeout 60" />
+
+  </group>
+
+</launch>

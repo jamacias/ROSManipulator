@@ -1,17 +1,26 @@
-<?xml version="1.0" ?>
+<?xml version = "1.0" ?>
 
-<robot name="manipulator" xmlns:xacro="http://www.ros.org/wiki/xacro">
+<robot name = "manipulator" xmlns:xacro="http://www.ros.org/wiki/xacro">
 
   <!-- Include xacros that define the types of joints and links present -->
-  <xacro:include filename="$(find manipulator_description)/urdf/links_joints.xacro" />
+  <xacro:include filename = "$(find manipulator_description)/urdf/links_joints.xacro" />
 
   <!-- Constant definitions -->
-  <xacro:property name="base_height" value="0.2" />
-  <xacro:property name="L1" value="0.2" />
-  <xacro:property name="L2" value="1.2" />
-  <xacro:property name="L3" value="1.6" />
+  <xacro:property name = "base_height" value = "0.2" />
+  <xacro:property name = "L1" value = "0.2" />
+  <xacro:property name = "L2" value = "1.2" />
+  <xacro:property name = "L3" value = "1.6" />
 
   <!-- Definition of the robot using the included macros -->
+
+  <!-- Used for fixing robot to Gazebo 'base_link' -->
+  <link name="world"/>
+
+  <joint name="fixed" type="fixed">
+    <parent link="world"/>
+    <child link="base_link"/>
+  </joint>
+
   <box_link
     name = "base_link"
     origin_rpy = "0 0 0"
@@ -24,18 +33,18 @@
   />
 
   <revolute_joint
-    name="q1" type="revolute"
-    axis_xyz="0 0 1"
-    origin_rpy="0 0 0" origin_xyz="0 0 ${base_height}"
-    parent="base_link"
-    child="link1"
-    limit_e="1000.0" limit_l="-3.14" limit_u="3.14" limit_v="0.5"
+    name = "q1" type = "revolute"
+    axis_xyz = "0 0 1"
+    origin_rpy = "0 0 0" origin_xyz = "0 0 ${base_height}"
+    parent = "base_link"
+    child = "link1"
+    limit_e = "1000.0" limit_l = "-3.14" limit_u = "3.14" limit_v = "0.5"
   />
 
   <cylinder_link
-    name="link1"
-    origin_rpy="0 0 0" origin_xyz="0 0 ${L1/2}"
-    radius="0.35" length="${L1}"
+    name = "link1"
+    origin_rpy = "0 0 0" origin_xyz = "0 0 ${L1/2}"
+    radius = "0.35" length = "${L1}"
     mass = "4"
     ixx = "3" ixy = "0"   ixz = "0"
               iyy = "3"  iyz = "0"
@@ -43,18 +52,18 @@
   />
 
   <revolute_joint
-    name="q2" type="revolute"
-    axis_xyz="0 1 0"
-    origin_rpy="0 0 0" origin_xyz="0 0 ${L1}"
-    parent="link1"
-    child="link2"
-    limit_e="1000.0" limit_l="-3.14" limit_u="3.14" limit_v="0.5"
+    name = "q2" type = "revolute"
+    axis_xyz = "0 1 0"
+    origin_rpy = "0 0 0" origin_xyz = "0 0 ${L1}"
+    parent = "link1"
+    child = "link2"
+    limit_e = "1000.0" limit_l = "-3.14" limit_u = "3.14" limit_v = "0.5"
   />
 
   <cylinder_link
-    name="link2"
-    origin_rpy="0 0 0" origin_xyz="0 0 ${L2/2}"
-    radius="0.15" length="${L2}"
+    name = "link2"
+    origin_rpy = "0 0 0" origin_xyz = "0 0 ${L2/2}"
+    radius = "0.15" length = "${L2}"
     mass = "6"
     ixx = "5" ixy = "0"   ixz = "0"
               iyy = "5"  iyz = "0"
@@ -62,21 +71,29 @@
   />
 
   <revolute_joint
-    name="q3" type="revolute"
-    axis_xyz="0 1 0"
-    origin_rpy="0 0 0" origin_xyz="0 0 ${L2}"
-    parent="link2"
-    child="link3"
-    limit_e="1000.0" limit_l="-3.14" limit_u="3.14" limit_v="0.5"
+    name = "q3" type = "revolute"
+    axis_xyz = "0 1 0"
+    origin_rpy = "0 0 0" origin_xyz = "0 0 ${L2}"
+    parent = "link2"
+    child = "link3"
+    limit_e = "1000.0" limit_l = "-3.14" limit_u = "3.14" limit_v = "0.5"
   />
 
   <cylinder_link
-    name="link3"
-    origin_rpy="0 0 0" origin_xyz="0 0 ${L3/2}"
-    radius="0.15" length="${L3}"
+    name = "link3"
+    origin_rpy = "0 0 0" origin_xyz = "0 0 ${L3/2}"
+    radius = "0.15" length = "${L3}"
     mass = "8"
     ixx = "6" ixy = "0"   ixz = "0"
               iyy = "6"   iyz = "0"
                           izz = "6"
   />
+  <!-- End robot description -->
+
+  <!-- Gazebo node for ros control -->
+  <gazebo>
+    <plugin name="gazebo_ros_control" filename="libgazebo_ros_control.so">
+    </plugin>
+  </gazebo>
+
 </robot>

@@ -1,0 +1,2 @@
+# Write to joint controllers.
+rostopic pub -1 /manipulator/joint3_position_controller/command std_msgs/Float64 "data: 1.5"

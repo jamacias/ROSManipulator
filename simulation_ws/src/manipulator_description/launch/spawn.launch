@@ -4,10 +4,11 @@
   <include file="$(find gazebo_ros)/launch/empty_world.launch">
     <arg name="use_sim_time" value="true"/>
     <arg name="debug" value="false"/>
+    <arg name="paused" value="true"/>
   </include>
 
   <!-- Translate model from xacro to URDF -->
-  <param name="robot_description" command="$(find xacro)/xacro --inorder '$(find manipulator_description)/urdf/manipulator.xacro'" />
+  <param name="robot_description" command="$(find xacro)/xacro '$(find manipulator_description)/urdf/manipulator.xacro'" />
 
   <arg name="x" default="0"/>
   <arg name="y" default="0"/>
